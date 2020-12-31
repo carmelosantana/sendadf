@@ -1,0 +1,9 @@
+<?php
+return (object)[
+    'rootNamespace' => 'carmelosantana\SendADF', 
+    'destDirectory' => 'docs',
+    'format' => 'github',
+    'classes' => [
+        'carmelosantana\SendADF\SendADF'
+    ],
+];

@@ -1,0 +1,76 @@
+<!ELEMENT adf (prospect+)>
+<!ELEMENT prospect (id*, requestdate, vehicle+, customer, vendor, provider?)>
+<!ATTLIST prospect status (new | resend) “new”>
+<!ELEMENT requestdate (#PCDATA)>
+<!-- Vehicle -->
+<!ELEMENT vehicle (id*, year, make, model, vin?, stock?, trim?, doors?, bodystyle?, transmission?, odometer?, colorcombination*, imagetag?, price?, pricecomments?, option*, finance?, comments?)>
+<!ATTLIST vehicle interest (buy | lease | sell | trade-in | test-drive) "buy">
+<!ATTLIST vehicle status (new | used) “new”>
+<!ELEMENT year (#PCDATA)>
+<!ELEMENT make (#PCDATA)>
+<!ELEMENT model (#PCDATA)>
+<!ELEMENT vin (#PCDATA)>
+<!ELEMENT trim (#PCDATA)>
+<!ELEMENT doors (#PCDATA)>
+<!ELEMENT bodystyle (#PCDATA)>
+<!ELEMENT transmission (#PCDATA)>
+<!ELEMENT odometer (#PCDATA)>
+<!ATTLIST odometer status (unknown | rolledover | replaced | original) #IMPLIED units (km | mi) #IMPLIED>
+<!ELEMENT condition (#PCDATA)>
+<!ELEMENT colorcombination (((interiorcolor | exteriorcolor) | (interiorcolor, exteriorcolor)), preference)>
+<!ELEMENT imagetag (#PCDATA)>
+<!ATTLIST imagetag width CDATA #IMPLIED height CDATA #IMPLIED alttext CDATA #IMPLIED>
+<!ELEMENT pricecomments (#PCDATA)>
+<!ELEMENT option (optionname, manufacturercode?, stock?, weighting price?)>
+<!ELEMENT finance (method, amount+, balance?)>
+<!-- Vehicle subtags -->
+<!ELEMENT interiorcolor (#PCDATA)>
+<!ELEMENT exteriorcolor (#PCDATA)>
+<!ELEMENT preference (#PCDATA)>
+<!ELEMENT optionname (#PCDATA)>
+<!ELEMENT manufacturercode (#PCDATA)>
+<!ELEMENT weighting (#PCDATA)>
+<!ELEMENT method (#PCDATA)>
+<!ELEMENT amount (#PCDATA)>
+<!ATTLIST amount type (downpayment | monthly | total) "total" limit (maximum | minimum | exact) "maximum" currency CDATA #IMPLIED>
+<!ELEMENT balance (#PCDATA)>
+<!ATTLIST balance type (finance | residual) "finance" currency CDATA #IMPLIED>
+<!-- Customer -->
+<!ELEMENT customer (contact, id*, timeframe?, comments?)>
+<!ELEMENT timeframe (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT earliestdate (#PCDATA)>
+<!ELEMENT latestdate (#PCDATA)>
+<!-- Vendor -->
+<!ELEMENT vendor (id*, vendorname, url?, contact)>
+<!ELEMENT vendorname (#PCDATA)>
+<!-- Provider -->
+<!ELEMENT provider (id*, name, service?, url?, email?, phone?, contact?)>
+<!ELEMENT service (#PCDATA)>
+<!-- Contact -->
+<!ELEMENT contact (name+, ((email | phone+) | (email, phone+)), address?)>
+<!ELEMENT name (#PCDATA)>
+<!ATTLIST name part (surname | first | middle | last | full) "full" type (business | individual) "individual">
+<!ELEMENT email (#PCDATA)>
+<!ATTLIST email preferredcontact (0 | 1) “0”>
+<!ELEMENT phone (#PCDATA)>
+<!ATTLIST phone type (voice | fax | cellphone | pager) "voice" time (morning | afternoon | evening | nopreference | day) "nopreference" preferredcontact (0 | 1) "0">
+<!ELEMENT address (street+, apartment?, city?, regioncode?, postalcode?, country?)>
+<!ATTLIST address type (work | home | delivery) #IMPLIED>
+<!ELEMENT street (#PCDATA)>
+<!ATTLIST street line CDATA #IMPLIED>
+<!ELEMENT apartment (#PCDATA)>
+<!ELEMENT city (#PCDATA)>
+<!ELEMENT regioncode (#PCDATA)>
+<!ELEMENT postalcode (#PCDATA)>
+<!ELEMENT country (#PCDATA)>
+<!-- Price -->
+<!ELEMENT price (#PCDATA)>
+<!ATTLIST price type (quote | offer | msrp | invoice | call | appraisal | asking) "quote" currency CDATA #IMPLIED delta (absolute | relative | percentage) #IMPLIED relativeto (msrp | invoice) #IMPLIED source CDATA #IMPLIED>
+<!-- Id -->
+<!ELEMENT id (#PCDATA)>
+<!ATTLIST id sequence CDATA #IMPLIED source CDATA #IMPLIED>
+<!-- Other tags used in more than one place -->
+<!ELEMENT comments (PCDATA)>
+<!ELEMENT stock (#PCDATA)>
+<!ELEMENT url (#PCDATA)>
