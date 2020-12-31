@@ -125,14 +125,13 @@ Creating a valid ADF line by line using predefined keys.
 |[add_vendor](#sendadfadd_vendor)|Add <vendor> to <prospect> node.|
 |[date](#sendadfdate)|ISO 8601 format date|
 |[getPrettyPrintXML](#sendadfgetprettyprintxml)|Format XML and make it pretty!|
-|[getXML](#sendadfgetxml)|Returns valid ADF/XML
-- provides any necessary missing values|
+|[getXML](#sendadfgetxml)|Returns valid ADF/XML|
 |[instance](#sendadfinstance)|Initialize instance, start ADF document.|
 |[is_json](#sendadfis_json)|Checks if string is JSON.|
 |[prepare_data](#sendadfprepare_data)|Converts JSON or php object to an array|
 |[set_requestdate](#sendadfset_requestdate)|Sets requestdate|
 
-
+---
 
 ### SendADF::__construct  
 
