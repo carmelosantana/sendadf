@@ -4,7 +4,7 @@ require dirname( __DIR__ ) . '/vendor/autoload.php';
 // example 4: Custom tags using add_parent_node() + add_node() with validation disabled.
 $adf = ( new carmelosantana\SendADF\SendADF( 'WINDOWS-1250', '1.1' ) )
     ->validation( false )
-    ->set_requestdate( '02/08/2021 10:41AM' )
+    ->add_requestdate( '02/08/2021 10:41AM' )
     ->add_parent_node( 'cars', [
         'Year' => 1999,
         'Make' => 'Chevrolet',
