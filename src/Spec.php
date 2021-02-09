@@ -198,7 +198,8 @@ class Spec {
     private $phone = [
         '@attributes' => [
             'type' => [
-                'phone',
+                'phone', // not in DTD but in documentation
+                'voice',
                 'fax',
                 'cellphone',
                 'pager'
