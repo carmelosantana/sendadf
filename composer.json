@@ -1,13 +1,16 @@
 {
     "name": "carmelosantana/sendadf",
-    "description": "Build and send valid ADF XML formatted leads.",
+    "description": "Library to build valid Auto-Lead Data Format ADF/XML leads.",
+    "version": "0.2.0",
     "keywords": [
         "adf",
         "xml",
         "auto-lead",
         "automotive",
-        "crm"
-    ],    
+        "crm",
+        "leads",
+        "vehicle"
+    ],
     "type": "library",
     "authors" : [
         {
@@ -15,7 +18,7 @@
             "email" : "git@carmelosantana.com",
             "homepage" : "https://carmelosantana.com"
         }
-    ],    
+    ],
     "license": "MIT",
     "require": {
         "php": ">=7.2"
@@ -23,14 +26,14 @@
     "require-dev": {
         "clean/phpdoc-md": "^0.19.1",
 		"phpunit/phpunit": "6.*"
-    },    
+    },
     "autoload": {
         "psr-4": {
             "carmelosantana\\SendADF\\": "src/"
         }
-    },  
+    },
     "support": {
-        "issues": "https://github.com/carmelosantana/sendpress/issues",
-        "source": "https://github.com/carmelosantana/sendpress"
+        "issues": "https://github.com/carmelosantana/sendadf/issues",
+        "source": "https://github.com/carmelosantana/sendadf"
     }
 }
