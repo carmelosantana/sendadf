@@ -197,6 +197,36 @@ class SendADF {
     }
  
     /**
+     * Converts time to ISO 8601. Defaults to current time() if none provided.
+     * 
+     * @param mixed $time Can be unix time stamp or date as a string
+     * 
+     * @return object This instance (current working document)
+     */
+    public function add_requestdate( $time=null ): object
+    {
+        // check if we already have requestdate in current working document
+        if ( $this->has_requestdate() )
+            return $this;
+
+        // no time provided
+        if ( !$time )
+            $time = time();
+
+        // try to convert to unix timestamp
+        if ( !is_int( $time ) )
+            $time = strtotime( $time );
+
+        // conversion failed use current time() for requestdate
+        if ( !$time )
+            $time = time();
+
+        $this->add_child( $this->get_prospect(), 'requestdate', self::date( $time ) );
+
+        return $this;
+    }
+
+    /**
      * Add vendor to prospect element.
      * 
      * @return object This instance (current working document)
@@ -260,30 +290,10 @@ class SendADF {
     public function getXML(): string
     {
         // set requestdate if validation is enabled and requestdate is missing
-        if ( $this->validation and !isset( ( (array) $this->get_prospect()->children() )['requestdate'] ) )
-            $this->set_requestdate();
+        if ( $this->validation and !$this->has_requestdate() )
+            $this->add_requestdate();
 
         return $this->xml->asXML();
-    }
-
-    /**
-     * Converts time to ISO 8601. Defaults to current time() if none provided.
-     * 
-     * @param mixed $time Can be unix time stamp or date as a string
-     * 
-     * @return object This instance (current working document)
-     */
-    public function set_requestdate( $time=null ): object
-    {
-        if ( !$time )
-            $time = time();
-
-        if ( !is_int( $time ) )
-            $time = strtotime( $time );
-
-        $this->add_child( $this->get_prospect(), 'requestdate', self::date( $time ) );
-
-        return $this;
     }
 
     /**
@@ -439,6 +449,19 @@ class SendADF {
             if ( !empty( $value ) )
                 $node->addChild( $key, $value );
         }
+    }
+
+    /**
+     * Checks if current working document has a requestdate element.
+     * 
+     * @return bool If requestdate exists
+     */
+    private function has_requestdate(): bool
+    {
+        if ( isset( ( (array) $this->get_prospect()->children() )['requestdate'] ) )
+            return true;
+
+        return false;
     }
 
     /**
