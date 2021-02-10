@@ -1,10 +1,11 @@
 # composer
 composer.phar
-/vendor/
+vendor/
 
 # phpdoc
 phpdoc-md
-/.phpdoc
-/docs/phpdoc
-/docs/README.md
-/docs/SendADF.md
+.phpdoc
+docs/phpdoc
+docs/README.md
+docs/SendADF.md
+docs/example.php
