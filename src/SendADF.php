@@ -8,14 +8,14 @@ namespace carmelosantana\SendADF;
  * - Default values are derived from ADF version 1.0
  */
 class SendADF {
-    /** @var object Current XML node */
-    protected $current;
+    /** @var array $nodes Stores working XML nodes */
+    public $nodes = [];
 
-    /** @var object Previous working current node */
-    protected $parent;
-    
-    /** @var object <prospect> node */
-    protected $prospect;
+    /** @var bool $validation Flag for tag and attribute validation */
+    private $validation = true;
+
+    /** @var string $version SendADF() version */
+    private $version = '0.2.0';
 
     /** @var object Current XML document */
     protected $xml;
@@ -23,148 +23,142 @@ class SendADF {
     /**
      * Start XML object
      * 
-     * @param string Version of ADF
-     * @param string Format of XML
+     * @param string $charset Character encoding
+     * @param string|int $document_version Document version
      */
-    public function __construct( $charset='UTF-8', $format='adf', $version='1.0' )
+    public function __construct( string $charset='UTF-8', $document_version='1.0' )
     {
-        /** @var string Character encoding */
-        $this->charset = strtoupper($charset);
+        // Configurable character encoding
+        $this->charset = $charset;
 
-        /** @var string Lead format requested */
-        $this->format = strtolower($format);
+        // Configurable document format
+        $this->document_format = 'adf';
 
-        /** @var mixed adf version requested */
-        $this->version = $version;
+        // Configurable document version
+        $this->document_version = (string) $document_version;
 
-        /** @var array template of allowed parameters */
-        $this->spec = Spec::get()->by_version( $this->format, $this->version );
-
-        /** @var object start XML object */
-        $this->xml = new \SimpleXMLElement( '<?xml version="1.0" encoding="' . $this->charset . '"?><?' . $this->format . ' version="' . $this->version . '"?><' . $this->format . '/>' );
-
-        /** @var array set current working node and primary prospect node  */
-        $this->current = $this->prospect = $this->xml->addChild( array_key_first( $this->spec ) );
-    }
-
-	/**
-	 * Initialize instance, start ADF document.
-	 *
-	 * @return object
-	 */
-	public static function instance(): object
-	{
-		return new static();
+        // Start XML document
+        $this->xml = new \SimpleXMLElement( '<?xml version="1.0" encoding="' . $this->charset . '"?><?' . $this->document_format . ' version="' . $this->document_version . '"?><' . $this->document_format  . '/>' );
     }
 
     /**
-     * Resets current working node to <prospect>.
-     *
-     * @return object This instance (current working document)
-     */
-    public function add(): object {
-        $this->current = $this->prospect;
-
-        return $this;
-    }
-    
-    /**
-     * Starts a <contact> node in current working node. 
+     * Starts an address node in current working element. 
+     * 
+     * @param string $type Type of address
      *
      * @return object This instance (current working document) 
      */
-    public function add_contact(): object
+    public function add_address( string $type=null ): object
     {
-        $this->start_node( $this->current, 'contact' );
+        $this->start_node( $this->get_current(), 'address', [], [ 'type' => $type ] );
+
+        return $this;
+    }    
+    
+    /**
+     * Starts a contact node in current working element.
+     * 
+     * @param int $primarycontact Identifies if primary contact
+     *
+     * @return object This instance (current working document) 
+     */
+    public function add_contact( $primarycontact=null ): object
+    {
+        $this->start_node( $this->get_current(), 'contact', [], [ 'primarycontact' => $primarycontact ] );
 
         return $this;
     }
 
     /**
-     * Add <customer> to <prospect> node.
+     * Add customer node to prospect element.
      *  
      * @return object This instance (current working document)
      */
     public function add_customer(): object
     {
-        $this->start_node( $this->prospect, 'customer' );
+        $this->start_node( $this->get_prospect(), 'customer' );
 
         return $this;
     }
 
     /**
-     * Add <email> current working node.
+     * Add an email node to current working element.
      * 
-     * @param string Email address of contact
-     * @param int Set prefferedcontact=”1” to indicate this as the preferred method of contact (attribute)
+     * @param string $data Email address of contact
+     * @param int $preferredcontact Indicates this as the preferred contact method (attribute)
      * 
      * @return object This instance (current working document)
      */
     public function add_email( $data, $preferredcontact=null ): object
     {
-        $this->add_child( $this->current, 'email', $data, [ 'preferredcontact' => $preferredcontact ] );
+        $this->add_child( $this->get_current(), 'email', $data, [ 'preferredcontact' => $preferredcontact ] );
 
         return $this;
     }
 
     /**
-     * Add <name> current working node.
+     * Add name to current working element.
      * 
-     * @param string Name of contact
-     * @param string Part of name (attribute)
-     * @param string Type individual|business (attribute)
+     * @param string $data Name of contact
+     * @param string $part Part of name (attribute)
+     * @param string $type Type of name (attribute)
      * 
      * @return object This instance (current working document)
      */
     public function add_name( $data, $part='full', $type='individual' ): object
     {
-        $this->add_child( $this->current, 'name', $data, [ 'part' => $part, 'type' => $type ] );
+        $this->add_child( $this->get_current(), 'name', $data, [ 'part' => $part, 'type' => $type ] );
 
         return $this;
     }
 
     /**
-     * Add a user defined <node>.
+     * Add a user defined node to current working node.
      *
-     * @param string Name of node
-     * @param string Data value for node
-     * @param array Attributes array [ attribute_key => attribute_value ]
+     * @param string $name Name of node
+     * @param mixed $data Data for node
+     * @param array $attributes Attributes array [ attribute_key => attribute_value ]
      * 
      * @return object This instance (current working document)
      */
-    public function add_node( string $name=null, string $data=null, array $attributes=[] ): object
+    public function add_node( string $name=null, $data, array $attributes=[] ): object
     {
-        $this->add_child( $this->current, $name, $data, $attributes );
+        $this->add_child( $this->get_current(), $name, $data, $attributes );
 
         return $this;
     }
 
     /**
-     * Add a user defined parent node to the current working node. This node becomes the new current working node.
+     * Add a user defined parent node to the current working element becoming the new current working node.
      *
-     * @param string Name of new parent node
-     * @param array Attributes array [ attribute_key => attribute_value ]
+     * @param string $name Name of new parent node
+     * @param mixed $data Data for node
+     * @param array $attributes Attributes array [ attribute_key => attribute_value ]
+     * @param bool $close_node If enabled will open and close node
      * 
      * @return object This instance (current working document)
      */
-    public function add_parent_node( string $name=null, array $attributes=[] )
+    public function add_parent_node( string $name, $data=null, $attributes=[], $close_node=false )
     {
-        $this->add_child( $this->current, $name, $attributes );
+        $this->start_node( $this->get_current(), $name, $data, $attributes );
 
-        return $this;        
+        if ( $close_node )
+            $this->close_node();
+
+        return $this;
     }
 
     /**
-     * Add <phone> current working node.
+     * Add phone to current working element.
      * 
-     * @param string Phone number of contact
-     * @param string Type attribute (phone|fax|cellphone|pager)
-     * @param string Time parameter indicates that this entry is the preferred contact number.
-     * @param int Preferred contact attribute. Set prefferedcontact=”1” to indicate this as the preferred method of contact. (0|1)
+     * @param string $data Phone number of contact
+     * @param string $type Type of phone number (attribute)
+     * @param string $time Best time for this number (attribute) 
+     * @param int $preferredcontact Indicates this as the preferred contact method (attribute)
      * 
      * @return object This instance (current working document)
      */
-    public function add_phone( $data, $type='full', $time='individual', $preferredcontact=null ): object
+    public function add_phone( $data, $type='voice', $time='nopreference', $preferredcontact='0' ): object
     {
         $this->add_child( null, 'phone', $data, [ 'type' => $type, 'time' => $time, 'preferredcontact' => $preferredcontact ] );
 
@@ -172,74 +166,114 @@ class SendADF {
     }
 
     /**
-     * Add <provider> to <prospect> node.
+     * Add primary prospect node to adf element.
+     *
+     * @param string $status Identify leads that are being resent (attribute)
+     * 
+     * @return object
+     */
+    public function add_prospect( string $status='new' ): object
+    {
+        $this->prospect = $this->xml->addChild( 'prospect' );
+
+        if ( $status )
+            $this->prospect->addAttribute( 'status', $status );
+
+        array_unshift( $this->nodes, $this->prospect );
+
+        return $this;
+    }
+
+    /**
+     * Add provider to prospect element.
      * 
      * @return object This instance (current working document)
      */
     public function add_provider(): object
     {
-        $this->start_node( $this->prospect, 'provider' );
+        $this->start_node( $this->get_prospect(), 'provider' );
         
         return $this;
     }
  
     /**
-     * Add <vendor> to <prospect> node.
+     * Converts time to ISO 8601. Defaults to current time() if none provided.
+     * 
+     * @param mixed $time Can be unix time stamp or date as a string
+     * 
+     * @return object This instance (current working document)
+     */
+    public function add_requestdate( $time=null ): object
+    {
+        // check if we already have requestdate in current working document
+        if ( $this->has_requestdate() )
+            return $this;
+
+        // no time provided
+        if ( !$time )
+            $time = time();
+
+        // try to convert to unix timestamp
+        if ( !is_int( $time ) )
+            $time = strtotime( $time );
+
+        // conversion failed use current time() for requestdate
+        if ( !$time )
+            $time = time();
+
+        $this->add_child( $this->get_prospect(), 'requestdate', self::date( $time ) );
+
+        return $this;
+    }
+
+    /**
+     * Add vendor to prospect element.
      * 
      * @return object This instance (current working document)
      */    
     public function add_vendor(): object
     {
-        $this->start_node( $this->prospect, 'vendor' );
+        $this->start_node( $this->get_prospect(), 'vendor' );
 
         return $this;
     }
 
     /**
-     * Add a <vehicle> node to <prospect>.
+     * Add a vehicle node to prospect element.
      * 
-     * @param array Data associative array of vehicle data
-     * @param string Interest attribute (buy|sell)
-     * @param string Status attribute (new|used)
+     * @param mixed $data Data associative array of vehicle data
+     * @param string $interest Identifies intended purpose of this vehicle (attribute)
+     * @param string $status Identifies new or used vehicle (attribute)
      * 
      * @return object This instance (current working document)
      */
     public function add_vehicle( $data, $interest='buy', $status='new' ): object
     {
-        $this->add_child( $this->prospect, 'vehicle', $data, [ 'interest' => $interest, 'status' => $status ] );
+        $this->start_node( $this->get_prospect(), 'vehicle', $data, [ 'interest' => $interest, 'status' => $status ] );
         
         return $this;
     }
 
     /**
-     * Sets requestdate
-     * 
-     * @param mixed Time argument can be unix time stamp or date as a string.
-     * 
+     * Closes current working element.
+     *
      * @return object This instance (current working document)
      */
-    public function set_requestdate( $time=null ): object
+    public function close_node(): object
     {
-        /** @var int defaults to current time() if none provided */
-        if ( !$time )
-            $time = time();
-
-        if ( !is_int( $time ) )
-            $time = strtotime( $time );
-
-        $this->requestdate = self::date( $time );
-
-        $this->add_child( $this->prospect, 'requestdate', $this->requestdate);
+        array_shift( $this->nodes );
 
         return $this;
     }
+
 
     /**
      * Format XML and make it pretty!
      *
      * @return string Human readable XML
      */
-    public function getPrettyPrintXML(){
+    public function getPrettyPrintXML(): string
+    {
         $dom = new \DOMDocument;
         $dom->preserveWhiteSpace = false;
         $dom->loadXML( $this->getXML() );
@@ -249,37 +283,64 @@ class SendADF {
     }
     
     /**
-     * Returns valid ADF/XML
-     * - provides any necessary missing values
+     * Returns complete ADF/XML.
      * 
      * @return string ADF/XML 
      */
     public function getXML(): string
     {
-        if ( !property_exists( $this, 'requestdate' ) )
-            $this->set_requestdate();
+        // set requestdate if validation is enabled and requestdate is missing
+        if ( $this->validation and !$this->has_requestdate() )
+            $this->add_requestdate();
 
         return $this->xml->asXML();
     }
 
     /**
-     * Adds a child node + attributes if provided.
+     * Disabling validation allows for use of custom ADF tags.
+     *
+     * @param bool $validate Validation enabled by default, false to disable
      * 
-     * @param mixed XML object or null for <prospect>
-     * @param string Name of child node
-     * @param mixed Data for child node
-     * @param array Attributes for child node
+     * @return object This instance (current working document)
+     */
+    public function validation( $validate=true ): object
+    {
+        $this->validation = $validate;
+
+        return $this;
+    }    
+
+    /**
+     * SendADF version
+     *
+     * @return string
+     */
+    public function version(): string
+    {
+        return $this->version;
+    }
+
+    /**
+     * Adds a child node + attributes to provided element. Performs any necessary tag validation.
+     * 
+     * @param mixed XML object of parent element. Defaults to current working element.
+     * @param string $child New node tag
+     * @param mixed $data Data to populate node. Accepts strings and various arrays
+     * @param array $attributes Attributes array [ attribute_key => attribute_value ]
      * 
      * @return object New child node
      */
-    private function add_child( $parent=null, string $child=null, $data=[], array $attributes=[] ): object
+    private function add_child( $parent=null, string $child=null, $data, array $attributes=[] ): object
     {
         if ( !$parent )
-            $parent = $this->current;
+            $parent = $this->get_current();
 
         if ( !$child )
             throw new \Exception( "<$child> missing" );
         
+        if ( !self::validate_element( $parent, $child, $this->validation ) )
+            throw new \Exception( "<$child> not a valid tag of parent " . $parent->getName() );
+
         $data = self::prepare_data( $data );
         
         if ( is_string( $data ) ){
@@ -299,81 +360,114 @@ class SendADF {
     }
 
     /**
-     * Opens a new node and sets as current working node. 
+     * Starts a new parent node and sets as current working element. 
      *
-     * @param mixed XML object where node will be placed or null for <prospect>
-     * @param string Name of node
-     * @param array Data to populate node
-     * @param array Attributes for new current node
+     * @param mixed $parent XML object of parent element. Defaults to current working element.
+     * @param string $name New node tag
+     * @param mixed $data Data to populate node. Accepts strings and various arrays
+     * @param array $attributes Attributes array [ attribute_key => attribute_value ]
      * 
-     * @return object Newly created node
+     * @return object New parent node
      */
-    private function start_node( $parent, $name, $data=[], $attributes=[] )
+    private function start_node( $parent=null, string $name=null, $data=null, array $attributes=[] ): object
     {
-        $this->current = $this->add_child( $parent, $name, $data, $attributes );
+        array_unshift($this->nodes, $this->add_child( $parent, $name, $data, $attributes ) );
 
-        return $this->current;
+        return $this->get_current();
     }
 
     /**
-     * addChild iterator, if parameters are allowed
+     * Get current working element.
+     *
+     * @return object Current element
+     */
+    private function get_current(): object
+    {
+        if ( !isset($this->nodes[0]) )
+            $this->add_prospect();
+            
+        return $this->nodes[0];
+    }
+
+    /**
+     * Get and if missing sets primary prospect element.
+     *
+     * @return object Prospect element
+     */
+    private function get_prospect():object
+    {
+        if ( !isset($this->nodes[0]) )
+            $this->add_prospect();
+            
+        $prospect = end( $this->nodes );
+        reset( $this->nodes );
+
+        return $prospect;
+    }
+    /**
+     * Iterates through attributes applying each to supplied element. Performs validation checks if enabled.
      * 
-     * @param mixed Value value from array_walk
-     * @param string Key key from array_walk
-     * @param array Parameters array of allowed keys
+     * @param mixed $value Value from array_walk
+     * @param string $key Key from array_walk
+     * @param object $node Element to apply attributes to
      * 
      * @return void
      */
     private function iterate_addAttribute( $value, $key, $node ): void
     {
-        if ( !isset( Spec::get()->parameters( $node->getName() )['@attributes'] ) )
-            return;
+        if ( self::validate_attribute( $node, $key, $this->validation ) ){
+            $value = self::prepare_data( $value );
 
-        if ( in_array( strtolower( $key ), Spec::get()->parameters( $node->getName() )['@attributes'] ) ){
-            $value = (string) $value;
+            if ( $this->validation )
+                $key = strtolower( $key );
 
             if ( !empty( $value ) )
-                $node->addAttribute( strtolower( $key ), (string) $value );
+                $node->addAttribute( $key, $value );
         }
     }
 
     /**
-     * addChild iterator, if parameters are allowed
+     * Iterates through tags applying each to supplied element. Performs validation checks if enabled.
      * 
-     * @param mixed $value value from array_walk
-     * @param string $key key from array_walk
-     * @param array $parameters array of allowed keys
+     * @param mixed $value Value from array_walk
+     * @param string $key Key from array_walk
+     * @param object $node Element to apply tags to
      * 
      * @return void
      */
     private function iterate_addChild( $value, $key, $node ): void
     {
-        if ( in_array( strtolower( $key ), Spec::get()->parameters( $node->getName() ) ) ){
-            $node->addChild( strtolower( $key ), (string) $value );
+        if ( !is_object( $node ) )
+            return;
 
+        if ( self::validate_element( $node, $key, $this->validation  ) ){
+            $value = self::prepare_data( $value );
+
+            if ( $this->validation )
+                $key = strtolower( $key );
+
+            if ( !empty( $value ) )
+                $node->addChild( $key, $value );
         }
     }
 
     /**
-     * Converts JSON or php object to an array
+     * Checks if current working document has a requestdate element.
      * 
-     * @param mixed Data input
-     * 
-     * @return mixed Prepared data for adding to 
+     * @return bool If requestdate exists
      */
-    static function prepare_data( $data )
+    private function has_requestdate(): bool
     {
-        if ( self::is_json( $data ) )
-            $data = json_decode( $data );
+        if ( isset( ( (array) $this->get_prospect()->children() )['requestdate'] ) )
+            return true;
 
-        if ( is_object( $data ) )
-            return (array) $data;
-
-        return $data;
+        return false;
     }
 
     /**
-     * ISO 8601 format date
+     * Formats date to ISO 8601. Defaults to current time() if none provided.
+     * 
+     * @param mixed $time Time to convert
      * 
      * @return string Formatted date
      */
@@ -386,7 +480,7 @@ class SendADF {
      * Checks if string is JSON.
      * - https://stackoverflow.com/a/6041773/1007492 License CC BY-SA 3.0
      * 
-     * @param mixed Data to check
+     * @param mixed $data Data to check
      * 
      * @return bool Is this JSON?
      */
@@ -398,5 +492,73 @@ class SendADF {
 		json_decode( $data );
 
 		return ( json_last_error() == JSON_ERROR_NONE );
+    }
+
+    /**
+     * Converts JSON and objects to an array. Integers are converted into strings. 
+     * 
+     * @param mixed $data Data to prepare for input into a node
+     * 
+     * @return mixed Prepared data
+     */
+    static function prepare_data( $data )
+    {
+        if ( self::is_json( $data ) )
+            $data = json_decode( $data );
+
+        if ( is_object( $data ) )
+            return (array) $data;
+
+        if ( is_int( $data ) )
+            return (string) $data;
+
+        return $data;
+    }
+
+    /**
+     * Validates attribute, if validation is enabled.
+     *
+     * @param object $parent Element attribute is being applied to
+     * @param object $node Attribute being checked
+     * @param bool $validation $this->validation value
+     * 
+     * @return bool Validation response
+     */
+    static function validate_attribute( object $parent, string $node, bool $validation ): bool
+    {
+        if ( !$validation )
+            return true;
+
+        $node = strtolower( $node );
+        
+        if ( !isset( Spec::get()->element( $parent->getName() )['@attributes'] ) )
+            return false;
+
+        $attributes = Spec::get()->element( $parent->getName() )['@attributes'];
+
+        if ( in_array( $node, $attributes ) or key_exists($node, $attributes ) )
+            return true;
+
+        return false;
+    }
+
+    /**
+     * Validates tag, if validation is enabled.
+     *
+     * @param object $parent Element tag is being applied to
+     * @param object $node Tag being checked
+     * @param bool $validation $this->validation value
+     * 
+     * @return bool Validation response
+     */    
+    static function validate_element( object $parent, string $node, bool $validation ): bool
+    {
+        if ( !$validation )
+            return true;
+
+        if ( in_array( strtolower( $node ), Spec::get()->element( $parent->getName() ) ) )
+            return true;
+
+        return false;
     }
 }
