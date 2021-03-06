@@ -919,9 +919,11 @@ SendADF version
 
 ⭐ [Contact](https://github.com/carmelosantana/) to discuss commercial support.
 
+📬 Visit [sendadf.com](https://sendadf.com/) if your business requires a hands free hosted solution.
+
 ## Funding
 
-**SendADF** is community funded. If you use **SendADF** in a commercial environment please consider donating today with one of the following options.
+If you find SendADF useful or use it in a commercial environment please consider donating today with one of the following options.
 
 - [PayPal](https://www.paypal.com/donate?hosted_button_id=WHCW333MC7CNW)
 - Bitcoin `bc1qhxu9yf9g5jkazy6h4ux6c2apakfr90g2rkwu45`
