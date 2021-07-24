@@ -1,6 +1,6 @@
 # ![SendADF](https://sendadf.org/app/uploads/2021/01/SendADF-logo.png)
 
-PHP library to build valid Auto-Lead Data Format ADF/XML leads.
+PHP library that builds valid Auto-Lead Data Format ADF/XML leads.
 
 **Supports**
 
@@ -12,51 +12,52 @@ PHP library to build valid Auto-Lead Data Format ADF/XML leads.
 - Validate tags and attributes *(optional)*
 - Custom tags and attributes
 - Data entry via an associative `array`, `object`, or `JSON`
-- Attempts to convert dates to [ISO 8601:1988](https://en.wikipedia.org/wiki/ISO_8601)
+- Attempts date conversion to [ISO 8601:1988](https://en.wikipedia.org/wiki/ISO_8601)
 - Default attributes for `name`, `phone`, `prospect`, and `vehicle`
 
 ---
 
-- [Install](#install)
-- [Usage](#usage)
-  - [Basic lead](#basic-lead)
-  - [Output](#output)
-  - [Default values](#default-values)
-- [Examples](#examples)
-- [Methods](#methods)
-  - [SendADF::__construct](#sendadf__construct)
-  - [SendADF::add_address](#sendadfadd_address)
-  - [SendADF::add_contact](#sendadfadd_contact)
-  - [SendADF::add_customer](#sendadfadd_customer)
-  - [SendADF::add_email](#sendadfadd_email)
-  - [SendADF::add_name](#sendadfadd_name)
-  - [SendADF::add_node](#sendadfadd_node)
-  - [SendADF::add_parent_node](#sendadfadd_parent_node)
-  - [SendADF::add_phone](#sendadfadd_phone)
-  - [SendADF::add_prospect](#sendadfadd_prospect)
-  - [SendADF::add_provider](#sendadfadd_provider)
-  - [SendADF::add_requestdate](#sendadfadd_requestdate)
-  - [SendADF::add_vehicle](#sendadfadd_vehicle)
-  - [SendADF::add_vendor](#sendadfadd_vendor)
-  - [SendADF::close_node](#sendadfclose_node)
-  - [SendADF::date](#sendadfdate)
-  - [SendADF::getPrettyPrintXML](#sendadfgetprettyprintxml)
-  - [SendADF::getXML](#sendadfgetxml)
-  - [SendADF::is_json](#sendadfis_json)
-  - [SendADF::prepare_data](#sendadfprepare_data)
-  - [SendADF::validate_attribute](#sendadfvalidate_attribute)
-  - [SendADF::validate_element](#sendadfvalidate_element)
-  - [SendADF::validation](#sendadfvalidation)
-  - [SendADF::version](#sendadfversion)
-- [Support](#support)
-- [Funding](#funding)
-- [License](#license)
+- [SendADF](#)
+  - [Install](#install)
+  - [Usage](#usage)
+    - [Basic lead](#basic-lead)
+    - [Output](#output)
+    - [Default values](#default-values)
+  - [Examples](#examples)
+  - [Methods](#methods)
+    - [SendADF::__construct](#sendadf__construct)
+    - [SendADF::add_address](#sendadfadd_address)
+    - [SendADF::add_contact](#sendadfadd_contact)
+    - [SendADF::add_customer](#sendadfadd_customer)
+    - [SendADF::add_email](#sendadfadd_email)
+    - [SendADF::add_name](#sendadfadd_name)
+    - [SendADF::add_node](#sendadfadd_node)
+    - [SendADF::add_parent_node](#sendadfadd_parent_node)
+    - [SendADF::add_phone](#sendadfadd_phone)
+    - [SendADF::add_prospect](#sendadfadd_prospect)
+    - [SendADF::add_provider](#sendadfadd_provider)
+    - [SendADF::add_requestdate](#sendadfadd_requestdate)
+    - [SendADF::add_vehicle](#sendadfadd_vehicle)
+    - [SendADF::add_vendor](#sendadfadd_vendor)
+    - [SendADF::close_node](#sendadfclose_node)
+    - [SendADF::date](#sendadfdate)
+    - [SendADF::getPrettyPrintXML](#sendadfgetprettyprintxml)
+    - [SendADF::getXML](#sendadfgetxml)
+    - [SendADF::is_json](#sendadfis_json)
+    - [SendADF::prepare_data](#sendadfprepare_data)
+    - [SendADF::validate_attribute](#sendadfvalidate_attribute)
+    - [SendADF::validate_element](#sendadfvalidate_element)
+    - [SendADF::validation](#sendadfvalidation)
+    - [SendADF::version](#sendadfversion)
+  - [Support](#support)
+  - [Funding](#funding)
+  - [License](#license)
 
 ---
 
 ## Install
 
-Include `SendADF` in your project with [Composer](https://getcomposer.org/):
+Include SendADF in your project with [Composer](https://getcomposer.org/):
 
 ```bash
 $ composer require carmelosantana/sendadf
@@ -213,32 +214,32 @@ Sending empty values as shown in [example 1](https://github.com/carmelosantana/s
 
 ## Methods
 
-| Name | Description |
-|------|-------------|
-|[__construct](#sendadf__construct)|Start XML object|
-|[add_address](#sendadfadd_address)|Starts an address node in current working element.|
-|[add_contact](#sendadfadd_contact)|Starts a contact node in current working element.|
-|[add_customer](#sendadfadd_customer)|Add customer node to prospect element.|
-|[add_email](#sendadfadd_email)|Add an email node to current working element.|
-|[add_name](#sendadfadd_name)|Add name to current working element.|
-|[add_node](#sendadfadd_node)|Add a user defined node to current working node.|
-|[add_parent_node](#sendadfadd_parent_node)|Add a user defined parent node to the current working element becoming the new current working node.|
-|[add_phone](#sendadfadd_phone)|Add phone to current working element.|
-|[add_prospect](#sendadfadd_prospect)|Add primary prospect node to adf element.|
-|[add_provider](#sendadfadd_provider)|Add provider to prospect element.|
-|[add_requestdate](#sendadfadd_requestdate)|Converts time to ISO 8601. Defaults to current time() if none provided.|
-|[add_vehicle](#sendadfadd_vehicle)|Add a vehicle node to prospect element.|
-|[add_vendor](#sendadfadd_vendor)|Add vendor to prospect element.|
-|[close_node](#sendadfclose_node)|Closes current working element.|
-|[date](#sendadfdate)|Formats date to ISO 8601. Defaults to current time() if none provided.|
-|[getPrettyPrintXML](#sendadfgetprettyprintxml)|Format XML and make it pretty!|
-|[getXML](#sendadfgetxml)|Returns complete ADF/XML.|
-|[is_json](#sendadfis_json)|Checks if string is JSON.|
-|[prepare_data](#sendadfprepare_data)|Converts JSON and objects to an array. Integers are converted into strings.|
-|[validate_attribute](#sendadfvalidate_attribute)|Validates attribute, if validation is enabled.|
-|[validate_element](#sendadfvalidate_element)|Validates tag, if validation is enabled.|
-|[validation](#sendadfvalidation)|Disabling validation allows for use of custom ADF tags.|
-|[version](#sendadfversion)|SendADF version|
+| Name                                             | Description                                                                                          |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| [__construct](#sendadf__construct)               | Start XML object                                                                                     |
+| [add_address](#sendadfadd_address)               | Starts an address node in current working element.                                                   |
+| [add_contact](#sendadfadd_contact)               | Starts a contact node in current working element.                                                    |
+| [add_customer](#sendadfadd_customer)             | Add customer node to prospect element.                                                               |
+| [add_email](#sendadfadd_email)                   | Add an email node to current working element.                                                        |
+| [add_name](#sendadfadd_name)                     | Add name to current working element.                                                                 |
+| [add_node](#sendadfadd_node)                     | Add a user defined node to current working node.                                                     |
+| [add_parent_node](#sendadfadd_parent_node)       | Add a user defined parent node to the current working element becoming the new current working node. |
+| [add_phone](#sendadfadd_phone)                   | Add phone to current working element.                                                                |
+| [add_prospect](#sendadfadd_prospect)             | Add primary prospect node to adf element.                                                            |
+| [add_provider](#sendadfadd_provider)             | Add provider to prospect element.                                                                    |
+| [add_requestdate](#sendadfadd_requestdate)       | Converts time to ISO 8601. Defaults to current time() if none provided.                              |
+| [add_vehicle](#sendadfadd_vehicle)               | Add a vehicle node to prospect element.                                                              |
+| [add_vendor](#sendadfadd_vendor)                 | Add vendor to prospect element.                                                                      |
+| [close_node](#sendadfclose_node)                 | Closes current working element.                                                                      |
+| [date](#sendadfdate)                             | Formats date to ISO 8601. Defaults to current time() if none provided.                               |
+| [getPrettyPrintXML](#sendadfgetprettyprintxml)   | Format XML and make it pretty!                                                                       |
+| [getXML](#sendadfgetxml)                         | Returns complete ADF/XML.                                                                            |
+| [is_json](#sendadfis_json)                       | Checks if string is JSON.                                                                            |
+| [prepare_data](#sendadfprepare_data)             | Converts JSON and objects to an array. Integers are converted into strings.                          |
+| [validate_attribute](#sendadfvalidate_attribute) | Validates attribute, if validation is enabled.                                                       |
+| [validate_element](#sendadfvalidate_element)     | Validates tag, if validation is enabled.                                                             |
+| [validation](#sendadfvalidation)                 | Disabling validation allows for use of custom ADF tags.                                              |
+| [version](#sendadfversion)                       | SendADF version                                                                                      |
 
 ---
 
@@ -915,11 +916,7 @@ SendADF version
 
 ## Support
 
-💬 Join our [Discord](https://discord.gg/rsj2fA9tzw) if you need help implementing or extending functionality.
-
 ⭐ [Contact](https://github.com/carmelosantana/) to discuss commercial support.
-
-📬 Visit [sendadf.com](https://sendadf.com/) if your business requires a hands free hosted solution.
 
 ## Funding
 
