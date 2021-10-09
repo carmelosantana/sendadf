@@ -1,4 +1,4 @@
-# ![SendADF](https://sendadf.org/app/uploads/2021/01/SendADF-logo.png)
+# ![SendADF](https://sendadf.org/wp-content/uploads/2021/01/SendADF-logo.png)
 
 PHP library that builds valid Auto-Lead Data Format ADF/XML leads.
 
