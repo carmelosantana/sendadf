@@ -27,7 +27,7 @@ composer require carmelosantana/sendadf
 
 **Requirements:**
 
-- [PHP](https://www.php.net/manual/en/install.php) 7.3 or above
+- [PHP](https://www.php.net/manual/en/install.php) 8.1 or above
 - [Composer](https://getcomposer.org/)
 
 ## Usage
