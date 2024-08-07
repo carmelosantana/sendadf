@@ -56,7 +56,7 @@ $adf = ( new CarmeloSantana\SendAdf\SendAdf() )
 
 ### Output
 
-Basic output with no tabs:
+Basic output with no tabs.
 
 ```php
 echo $adf->getXml();
@@ -68,7 +68,7 @@ echo $adf->getXml();
 <adf><prospect status="new"><requestdate>2020-02-09T18:26:00-05:00</requestdate><vehicle interest="buy" status="used"><year>1999</year><make>Chevrolet</make><model>Blazer</model></vehicle><customer><contact><name part="full" type="individual">John Doe</name><phone type="voice" time="nopreference">393-999-3922</phone></contact></customer><vendor><contact><name part="full" type="individual">Acura of Bellevue</name></contact></vendor></prospect></adf>
 ```
 
-With tabs:
+Pretty print output.
 
 ```php
 echo $adf->getPrettyPrintXML();
