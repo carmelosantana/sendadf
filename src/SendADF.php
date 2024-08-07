@@ -15,7 +15,7 @@ class SendAdf {
     private $validation = true;
 
     /** @var string $version SendADF() version */
-    private $version = '0.2.0';
+    private $version = '0.3.0';
 
     /** @var object Current XML document */
     protected $xml;
