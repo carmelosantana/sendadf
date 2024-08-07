@@ -26,19 +26,10 @@ class SendAdf {
      * @param string $charset Character encoding
      * @param string|int $document_version Document version
      */
-    public function __construct( string $charset='UTF-8', $document_version='1.0' )
+    public function __construct(public string $charset = 'UTF-8', public string $document_format = 'adf', public string $document_version = '1.0')
     {
-        // Configurable character encoding
-        $this->charset = $charset;
-
-        // Configurable document format
-        $this->document_format = 'adf';
-
-        // Configurable document version
-        $this->document_version = (string) $document_version;
-
         // Start XML document
-        $this->xml = new \SimpleXMLElement( '<?xml version="1.0" encoding="' . $this->charset . '"?><?' . $this->document_format . ' version="' . $this->document_version . '"?><' . $this->document_format  . '/>' );
+        $this->xml = new \SimpleXMLElement('<?xml version="1.0" encoding="' . $this->charset . '"?><?' . $this->document_format . ' version="' . $this->document_version . '"?><' . $this->document_format  . '/>');
     }
 
     /**
