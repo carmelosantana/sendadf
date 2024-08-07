@@ -141,12 +141,12 @@ echo $adf->getPrettyPrintXML();
 </adf>
 ```
 
-- `prospect` tag is opened with status new without calling `add_prospect`.
-- `add_requestdate` current server time is used as the default for `requestdate` when none is provided.
+- `prospect` tag is opened with status new without calling `addProspect`.
+- `addRequestdate` current server time is used as the default for `requestdate` when none is provided.
 - `name` part and type are provided.
 - `phone` type and time are provided.
 
-Default values can be avoided by using `add_parent_node` and `add_node` as seen in [example 3](https://github.com/carmelosantana/sendadf/blob/main/examples/example-3.php).
+Default values can be avoided by using `addProspectparent_node` and `addNode` as seen in [example 3](https://github.com/carmelosantana/sendadf/blob/main/examples/example-3.php).
 
 Sending empty values as shown in [example 1](https://github.com/carmelosantana/sendadf/blob/main/examples/example-1.php) can disable these attributes as well.
 
