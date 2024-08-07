@@ -26,6 +26,7 @@ class SendAdf
      * Start XML object
      * 
      * @param string $charset Character encoding
+     * @param string $document_format Document format
      * @param string|int $document_version Document version
      */
     public function __construct(public string $charset = 'UTF-8', public string $document_format = 'adf', public string $document_version = '1.0')
@@ -41,9 +42,9 @@ class SendAdf
      *
      * @return object This instance (current working document) 
      */
-    public function add_address(string $type = null): object
+    public function addAddress(string $type = null): object
     {
-        $this->start_node($this->get_current(), 'address', [], ['type' => $type]);
+        $this->startNode($this->getCurrent(), 'address', [], ['type' => $type]);
 
         return $this;
     }
@@ -55,9 +56,9 @@ class SendAdf
      *
      * @return object This instance (current working document) 
      */
-    public function add_contact($primarycontact = null): object
+    public function addContact($primarycontact = null): object
     {
-        $this->start_node($this->get_current(), 'contact', [], ['primarycontact' => $primarycontact]);
+        $this->startNode($this->getCurrent(), 'contact', [], ['primarycontact' => $primarycontact]);
 
         return $this;
     }
@@ -67,9 +68,9 @@ class SendAdf
      *  
      * @return object This instance (current working document)
      */
-    public function add_customer(): object
+    public function addCustomer(): object
     {
-        $this->start_node($this->get_prospect(), 'customer');
+        $this->startNode($this->getProspect(), 'customer');
 
         return $this;
     }
@@ -82,9 +83,9 @@ class SendAdf
      * 
      * @return object This instance (current working document)
      */
-    public function add_email($data, $preferredcontact = null): object
+    public function addEmail($data, $preferredcontact = null): object
     {
-        $this->add_child($this->get_current(), 'email', $data, ['preferredcontact' => $preferredcontact]);
+        $this->addChild($this->getCurrent(), 'email', $data, ['preferredcontact' => $preferredcontact]);
 
         return $this;
     }
@@ -98,9 +99,9 @@ class SendAdf
      * 
      * @return object This instance (current working document)
      */
-    public function add_name($data, $part = 'full', $type = 'individual'): object
+    public function addName($data, $part = 'full', $type = 'individual'): object
     {
-        $this->add_child($this->get_current(), 'name', $data, ['part' => $part, 'type' => $type]);
+        $this->addChild($this->getCurrent(), 'name', $data, ['part' => $part, 'type' => $type]);
 
         return $this;
     }
@@ -114,9 +115,9 @@ class SendAdf
      * 
      * @return object This instance (current working document)
      */
-    public function add_node(string $name = null, $data, array $attributes = []): object
+    public function addNode(string $name = null, $data, array $attributes = []): object
     {
-        $this->add_child($this->get_current(), $name, $data, $attributes);
+        $this->addChild($this->getCurrent(), $name, $data, $attributes);
 
         return $this;
     }
@@ -131,12 +132,12 @@ class SendAdf
      * 
      * @return object This instance (current working document)
      */
-    public function add_parent_node(string $name, $data = null, $attributes = [], $close_node = false)
+    public function addParentNode(string $name, $data = null, $attributes = [], $close_node = false)
     {
-        $this->start_node($this->get_current(), $name, $data, $attributes);
+        $this->startNode($this->getCurrent(), $name, $data, $attributes);
 
         if ($close_node)
-            $this->close_node();
+            $this->closeNode();
 
         return $this;
     }
@@ -151,9 +152,9 @@ class SendAdf
      * 
      * @return object This instance (current working document)
      */
-    public function add_phone($data, $type = 'voice', $time = 'nopreference', $preferredcontact = '0'): object
+    public function addPhone($data, $type = 'voice', $time = 'nopreference', $preferredcontact = '0'): object
     {
-        $this->add_child(null, 'phone', $data, ['type' => $type, 'time' => $time, 'preferredcontact' => $preferredcontact]);
+        $this->addChild(null, 'phone', $data, ['type' => $type, 'time' => $time, 'preferredcontact' => $preferredcontact]);
 
         return $this;
     }
@@ -165,14 +166,14 @@ class SendAdf
      * 
      * @return object
      */
-    public function add_prospect(string $status = 'new'): object
+    public function addProspect(string $status = 'new'): object
     {
-        $this->prospect = $this->xml->addChild('prospect');
+        $prospect = $this->xml->addChild('prospect');
 
         if ($status)
-            $this->prospect->addAttribute('status', $status);
+            $prospect->addAttribute('status', $status);
 
-        array_unshift($this->nodes, $this->prospect);
+        array_unshift($this->nodes, $prospect);
 
         return $this;
     }
@@ -182,9 +183,9 @@ class SendAdf
      * 
      * @return object This instance (current working document)
      */
-    public function add_provider(): object
+    public function addProvider(): object
     {
-        $this->start_node($this->get_prospect(), 'provider');
+        $this->startNode($this->getProspect(), 'provider');
 
         return $this;
     }
@@ -196,10 +197,10 @@ class SendAdf
      * 
      * @return object This instance (current working document)
      */
-    public function add_requestdate($time = null): object
+    public function addRequestdate($time = null): object
     {
         // check if we already have requestdate in current working document
-        if ($this->has_requestdate())
+        if ($this->hasRequestdate())
             return $this;
 
         // no time provided
@@ -214,7 +215,7 @@ class SendAdf
         if (!$time)
             $time = time();
 
-        $this->add_child($this->get_prospect(), 'requestdate', self::date($time));
+        $this->addChild($this->getProspect(), 'requestdate', self::date($time));
 
         return $this;
     }
@@ -224,9 +225,9 @@ class SendAdf
      * 
      * @return object This instance (current working document)
      */
-    public function add_vendor(): object
+    public function addVendor(): object
     {
-        $this->start_node($this->get_prospect(), 'vendor');
+        $this->startNode($this->getProspect(), 'vendor');
 
         return $this;
     }
@@ -242,7 +243,7 @@ class SendAdf
      */
     public function add_vehicle($data, $interest = 'buy', $status = 'new'): object
     {
-        $this->start_node($this->get_prospect(), 'vehicle', $data, ['interest' => $interest, 'status' => $status]);
+        $this->startNode($this->getProspect(), 'vehicle', $data, ['interest' => $interest, 'status' => $status]);
 
         return $this;
     }
@@ -252,7 +253,7 @@ class SendAdf
      *
      * @return object This instance (current working document)
      */
-    public function close_node(): object
+    public function closeNode(): object
     {
         array_shift($this->nodes);
 
@@ -269,7 +270,7 @@ class SendAdf
     {
         $dom = new \DOMDocument;
         $dom->preserveWhiteSpace = false;
-        $dom->loadXML($this->getXML());
+        $dom->loadXML($this->getXml());
         $dom->formatOutput = true;
 
         return $dom->saveXML();
@@ -280,11 +281,11 @@ class SendAdf
      * 
      * @return string ADF/XML 
      */
-    public function getXML(): string
+    public function getXml(): string
     {
         // set requestdate if validation is enabled and requestdate is missing
-        if ($this->validation and !$this->has_requestdate())
-            $this->add_requestdate();
+        if ($this->validation and !$this->hasRequestdate())
+            $this->addRequestdate();
 
         return $this->xml->asXML();
     }
@@ -323,18 +324,18 @@ class SendAdf
      * 
      * @return object New child node
      */
-    private function add_child($parent = null, string $child = null, $data, array $attributes = []): object
+    private function addChild($parent = null, string $child = null, $data = null, array $attributes = []): object
     {
         if (!$parent)
-            $parent = $this->get_current();
+            $parent = $this->getCurrent();
 
         if (!$child)
             throw new \Exception("<$child> missing");
 
-        if (!self::validate_element($parent, $child, $this->validation))
+        if (!self::validateElement($parent, $child, $this->validation))
             throw new \Exception("<$child> not a valid tag of parent " . $parent->getName());
 
-        $data = self::prepare_data($data);
+        $data = self::prepareData($data);
 
         if (is_string($data)) {
             $node = $parent->addChild($child, $data);
@@ -342,11 +343,11 @@ class SendAdf
             $node = $parent->addChild($child);
 
             if (is_array($data) and !empty($data))
-                array_walk($data, [$this, 'iterate_addChild'], $node);
+                array_walk($data, [$this, 'iterateAddChild'], $node);
         }
 
         if (is_array($attributes) and !empty($attributes))
-            array_walk($attributes, [$this, 'iterate_addAttribute'], $node);
+            array_walk($attributes, [$this, 'iterateAddAttribute'], $node);
 
         return $node;
     }
@@ -361,11 +362,11 @@ class SendAdf
      * 
      * @return object New parent node
      */
-    private function start_node($parent = null, string $name = null, $data = null, array $attributes = []): object
+    private function startNode($parent = null, string $name = null, $data = null, array $attributes = []): object
     {
-        array_unshift($this->nodes, $this->add_child($parent, $name, $data, $attributes));
+        array_unshift($this->nodes, $this->addChild($parent, $name, $data, $attributes));
 
-        return $this->get_current();
+        return $this->getCurrent();
     }
 
     /**
@@ -373,10 +374,10 @@ class SendAdf
      *
      * @return object Current element
      */
-    private function get_current(): object
+    private function getCurrent(): object
     {
         if (!isset($this->nodes[0]))
-            $this->add_prospect();
+            $this->addProspect();
 
         return $this->nodes[0];
     }
@@ -386,10 +387,10 @@ class SendAdf
      *
      * @return object Prospect element
      */
-    private function get_prospect(): object
+    private function getProspect(): object
     {
         if (!isset($this->nodes[0]))
-            $this->add_prospect();
+            $this->addProspect();
 
         $prospect = end($this->nodes);
         reset($this->nodes);
@@ -405,10 +406,10 @@ class SendAdf
      * 
      * @return void
      */
-    private function iterate_addAttribute($value, $key, $node): void
+    private function iterateAddAttribute($value, $key, $node): void
     {
-        if (self::validate_attribute($node, $key, $this->validation)) {
-            $value = self::prepare_data($value);
+        if (self::validateAttribute($node, $key, $this->validation)) {
+            $value = self::prepareData($value);
 
             if ($this->validation)
                 $key = strtolower($key);
@@ -427,13 +428,13 @@ class SendAdf
      * 
      * @return void
      */
-    private function iterate_addChild($value, $key, $node): void
+    private function iterateAddChild($value, $key, $node): void
     {
         if (!is_object($node))
             return;
 
-        if (self::validate_element($node, $key, $this->validation)) {
-            $value = self::prepare_data($value);
+        if (self::validateElement($node, $key, $this->validation)) {
+            $value = self::prepareData($value);
 
             if ($this->validation)
                 $key = strtolower($key);
@@ -448,9 +449,9 @@ class SendAdf
      * 
      * @return bool If requestdate exists
      */
-    private function has_requestdate(): bool
+    private function hasRequestdate(): bool
     {
-        if (isset(((array) $this->get_prospect()->children())['requestdate']))
+        if (isset(((array) $this->getProspect()->children())['requestdate']))
             return true;
 
         return false;
@@ -476,7 +477,7 @@ class SendAdf
      * 
      * @return bool Is this JSON?
      */
-    static function is_json($data): bool
+    static function isJson($data): bool
     {
         if (!is_string($data))
             return false;
@@ -493,9 +494,9 @@ class SendAdf
      * 
      * @return mixed Prepared data
      */
-    static function prepare_data($data)
+    static function prepareData($data)
     {
-        if (self::is_json($data))
+        if (self::isJson($data))
             $data = json_decode($data);
 
         if (is_object($data))
@@ -516,7 +517,7 @@ class SendAdf
      * 
      * @return bool Validation response
      */
-    static function validate_attribute(object $parent, string $node, bool $validation): bool
+    static function validateAttribute(object $parent, string $node, bool $validation): bool
     {
         if (!$validation)
             return true;
@@ -543,7 +544,7 @@ class SendAdf
      * 
      * @return bool Validation response
      */
-    static function validate_element(object $parent, string $node, bool $validation): bool
+    static function validateElement(object $parent, string $node, bool $validation): bool
     {
         if (!$validation)
             return true;

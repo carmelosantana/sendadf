@@ -26,10 +26,10 @@ PHP library that builds valid Auto-Lead Data Format ADF/XML leads.
   - [Examples](#examples)
   - [Methods](#methods)
     - [SendADF::__construct](#sendadf__construct)
-    - [SendADF::add_address](#sendadfadd_address)
-    - [SendADF::add_contact](#sendadfadd_contact)
-    - [SendADF::add_customer](#sendadfadd_customer)
-    - [SendADF::add_email](#sendadfadd_email)
+    - [SendADF::addAddress](#sendadfaddAddress)
+    - [SendADF::addContact](#sendadfaddContact)
+    - [SendADF::addCustomer](#sendadfaddCustomer)
+    - [SendADF::addEmail](#sendadfaddEmail)
     - [SendADF::add_name](#sendadfadd_name)
     - [SendADF::add_node](#sendadfadd_node)
     - [SendADF::add_parent_node](#sendadfadd_parent_node)
@@ -76,20 +76,20 @@ This [example](https://github.com/carmelosantana/sendadf/blob/main/examples/exam
 
 ```php
 $adf = ( new CarmeloSantana\SendAdf\SendAdf() )
-    ->add_prospect( 'new' )
-    ->add_requestdate( '2/9/2020 6:26PM' )
+    ->addProspect( 'new' )
+    ->addRequestdate( '2/9/2020 6:26PM' )
     ->add_vehicle( [
         'year' => 1999,
         'make' => 'Chevrolet',
         'model' => 'Blazer'
     ], 'buy', 'used' )
-    ->add_customer()
-        ->add_contact()
-            ->add_name( 'John Doe' )
-            ->add_phone( '393-999-3922' )
-    ->add_vendor()
-        ->add_contact()
-            ->add_name( 'Acura of Bellevue' );
+    ->addCustomer()
+        ->addContact()
+            ->addName( 'John Doe' )
+            ->addPhone( '393-999-3922' )
+    ->addVendor()
+        ->addContact()
+            ->addName( 'Acura of Bellevue' );
 ```
 
 ### Output
@@ -97,7 +97,7 @@ $adf = ( new CarmeloSantana\SendAdf\SendAdf() )
 Basic output with no tabs:
 
 ```php
-echo $adf->getXML();
+echo $adf->getXml();
 ```
 
 ```xml
@@ -144,16 +144,16 @@ Default attribute values are added if none are supplied. This is to adhere to th
 
 ```php
 $adf = ( new CarmeloSantana\SendAdf\SendAdf() )
-    ->add_requestdate()
+    ->addRequestdate()
     ->add_vehicle( [
         'year' => 2020,
         'make' => 'Chevrolet',
         'model' => 'Blazer'
     ] )
-    ->add_customer()
-        ->add_contact()
-            ->add_name( 'John Doe' )
-            ->add_phone( '393-999-3922' );
+    ->addCustomer()
+        ->addContact()
+            ->addName( 'John Doe' )
+            ->addPhone( '393-999-3922' );
 
 echo $adf->getPrettyPrintXML();
 ```
@@ -217,10 +217,10 @@ Sending empty values as shown in [example 1](https://github.com/carmelosantana/s
 | Name                                             | Description                                                                                          |
 | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
 | [__construct](#sendadf__construct)               | Start XML object                                                                                     |
-| [add_address](#sendadfadd_address)               | Starts an address node in current working element.                                                   |
-| [add_contact](#sendadfadd_contact)               | Starts a contact node in current working element.                                                    |
-| [add_customer](#sendadfadd_customer)             | Add customer node to prospect element.                                                               |
-| [add_email](#sendadfadd_email)                   | Add an email node to current working element.                                                        |
+| [addAddress](#sendadfaddAddress)               | Starts an address node in current working element.                                                   |
+| [addContact](#sendadfaddContact)               | Starts a contact node in current working element.                                                    |
+| [addCustomer](#sendadfaddCustomer)             | Add customer node to prospect element.                                                               |
+| [addEmail](#sendadfaddEmail)                   | Add an email node to current working element.                                                        |
 | [add_name](#sendadfadd_name)                     | Add name to current working element.                                                                 |
 | [add_node](#sendadfadd_node)                     | Add a user defined node to current working node.                                                     |
 | [add_parent_node](#sendadfadd_parent_node)       | Add a user defined parent node to the current working element becoming the new current working node. |
@@ -270,12 +270,12 @@ Start XML object
 ---
 
 
-### SendADF::add_address  
+### SendADF::addAddress  
 
 **Description**
 
 ```php
-public add_address (string $type)
+public addAddress (string $type)
 ```
 
 Starts an address node in current working element. 
@@ -297,12 +297,12 @@ Starts an address node in current working element.
 ---
 
 
-### SendADF::add_contact  
+### SendADF::addContact  
 
 **Description**
 
 ```php
-public add_contact (int $primarycontact)
+public addContact (int $primarycontact)
 ```
 
 Starts a contact node in current working element. 
@@ -324,12 +324,12 @@ Starts a contact node in current working element.
 ---
 
 
-### SendADF::add_customer  
+### SendADF::addCustomer  
 
 **Description**
 
 ```php
-public add_customer (void)
+public addCustomer (void)
 ```
 
 Add customer node to prospect element. 
@@ -350,12 +350,12 @@ Add customer node to prospect element.
 ---
 
 
-### SendADF::add_email  
+### SendADF::addEmail  
 
 **Description**
 
 ```php
-public add_email (string $data, int $preferredcontact)
+public addEmail (string $data, int $preferredcontact)
 ```
 
 Add an email node to current working element. 

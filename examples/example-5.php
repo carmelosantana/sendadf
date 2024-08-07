@@ -77,16 +77,16 @@ $provider = '{
 $date = 'Wed, 25 Sep 2013 15:28:57 -0700';
 
 echo ( new CarmeloSantana\SendAdf\SendAdf() )
-    ->add_requestdate( $date )
+    ->addRequestdate( $date )
     ->add_vehicle( $vehicle1_array, 'trade-in', 'used' )
     ->add_vehicle( $vehicle2_json, 'buy', 'used' )
     ->add_vehicle( $vehicle3_object, 'lease', 'new' )
-    ->add_customer()
-        ->add_parent_node( 'contact', $customer, [], true)
-    ->add_vendor()
-        ->add_node( 'vendorname', 'Hudson Valley Automotive' )
-        ->add_parent_node( 'contact', $vendor, [], true)
-    ->add_provider()
-        ->add_parent_node( 'contact', $provider, [], true)
+    ->addCustomer()
+        ->addParentNode( 'contact', $customer, [], true)
+    ->addVendor()
+        ->addNode( 'vendorname', 'Hudson Valley Automotive' )
+        ->addParentNode( 'contact', $vendor, [], true)
+    ->addProvider()
+        ->addParentNode( 'contact', $provider, [], true)
     ->getPrettyPrintXML();
     
