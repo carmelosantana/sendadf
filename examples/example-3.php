@@ -2,7 +2,7 @@
 require dirname( __DIR__ ) . '/vendor/autoload.php';
 
 // example 3: Use add_parent_node() + add_node() to avoid default values.
-$adf = ( new carmelosantana\SendADF\SendADF() )
+$adf = ( new CarmeloSantana\SendAdf\SendAdf() )
     ->add_requestdate( '02/08/2021 10:41AM' )
     ->add_parent_node( 'vehicle', [
         'year' => 1999,

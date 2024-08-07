@@ -2,7 +2,7 @@
 require dirname( __DIR__ ) . '/vendor/autoload.php';
 
 // example 1: Minimal lead from ADF version 1.0.
-$adf = ( new carmelosantana\SendADF\SendADF() )
+$adf = ( new CarmeloSantana\SendAdf\SendAdf() )
     ->add_prospect( '' )
     ->add_requestdate( '3/30/2000 3:30PM' )
     ->add_vehicle( [

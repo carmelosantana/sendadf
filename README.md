@@ -75,7 +75,7 @@ $ composer require carmelosantana/sendadf
 This [example](https://github.com/carmelosantana/sendadf/blob/main/examples/example-1.php) lead represents the minimum data required to comply with ADF specifications.
 
 ```php
-$adf = ( new carmelosantana\SendADF\SendADF() )
+$adf = ( new CarmeloSantana\SendAdf\SendAdf() )
     ->add_prospect( 'new' )
     ->add_requestdate( '2/9/2020 6:26PM' )
     ->add_vehicle( [
@@ -143,7 +143,7 @@ echo $adf->getPrettyPrintXML();
 Default attribute values are added if none are supplied. This is to adhere to the ADF standard.
 
 ```php
-$adf = ( new carmelosantana\SendADF\SendADF() )
+$adf = ( new CarmeloSantana\SendAdf\SendAdf() )
     ->add_requestdate()
     ->add_vehicle( [
         'year' => 2020,

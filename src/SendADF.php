@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace carmelosantana\SendADF;
+namespace CarmeloSantana\SendAdf;
 
 /**
  * Creates a valid Auto-lead Data Format/ADF for the export of customer leads via XML.
  * - Default values are derived from ADF version 1.0
  */
-class SendADF {
+class SendAdf {
     /** @var array $nodes Stores working XML nodes */
     public $nodes = [];
 

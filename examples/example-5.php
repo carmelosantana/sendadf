@@ -76,7 +76,7 @@ $provider = '{
 
 $date = 'Wed, 25 Sep 2013 15:28:57 -0700';
 
-echo ( new carmelosantana\SendADF\SendADF() )
+echo ( new CarmeloSantana\SendAdf\SendAdf() )
     ->add_requestdate( $date )
     ->add_vehicle( $vehicle1_array, 'trade-in', 'used' )
     ->add_vehicle( $vehicle2_json, 'buy', 'used' )
