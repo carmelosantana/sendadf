@@ -78,9 +78,9 @@ $date = 'Wed, 25 Sep 2013 15:28:57 -0700';
 
 echo ( new CarmeloSantana\SendAdf\SendAdf() )
     ->addRequestdate( $date )
-    ->add_vehicle( $vehicle1_array, 'trade-in', 'used' )
-    ->add_vehicle( $vehicle2_json, 'buy', 'used' )
-    ->add_vehicle( $vehicle3_object, 'lease', 'new' )
+    ->addVehicle( $vehicle1_array, 'trade-in', 'used' )
+    ->addVehicle( $vehicle2_json, 'buy', 'used' )
+    ->addVehicle( $vehicle3_object, 'lease', 'new' )
     ->addCustomer()
         ->addParentNode( 'contact', $customer, [], true)
     ->addVendor()

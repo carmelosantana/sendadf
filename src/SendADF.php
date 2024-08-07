@@ -241,7 +241,7 @@ class SendAdf
      * 
      * @return object This instance (current working document)
      */
-    public function add_vehicle($data, $interest = 'buy', $status = 'new'): object
+    public function addVehicle($data, $interest = 'buy', $status = 'new'): object
     {
         $this->startNode($this->getProspect(), 'vehicle', $data, ['interest' => $interest, 'status' => $status]);
 

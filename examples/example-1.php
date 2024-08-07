@@ -5,7 +5,7 @@ require dirname( __DIR__ ) . '/vendor/autoload.php';
 $adf = ( new CarmeloSantana\SendAdf\SendAdf() )
     ->addProspect( '' )
     ->addRequestdate( '3/30/2000 3:30PM' )
-    ->add_vehicle( [
+    ->addVehicle( [
         'year' => 1999,
         'make' => 'Chevrolet',
         'model' => 'Blazer'
