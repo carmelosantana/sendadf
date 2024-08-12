@@ -1,6 +1,17 @@
-# ![SendADF](https://sendadf.org/wp-content/uploads/2021/01/SendADF-logo.png)
+# ![SendADF](https://carmelosantana.com/entity/d58a3366-e294-4297-83b6-03e690cf2813)
 
 PHP library that builds valid Auto-Lead Data Format ADF/XML leads.
+
+- [Install](#install)
+- [Usage](#usage)
+  - [Basic lead](#basic-lead)
+  - [Output](#output)
+  - [Default values](#default-values)
+- [Examples](#examples)
+- [Support](#support)
+- [Funding](#funding)
+- [Changelog](#changelog)
+- [License](#license)
 
 **Supports**
 
@@ -180,12 +191,19 @@ Community support available on [Discord](https://discord.gg/VCMvAMSJfg).
 
 ## Funding
 
-If you find SendADF useful or use it in a commercial environment please consider donating today with one of the following options.
+If you find this project useful or use it in a commercial environment please consider donating today with one of the following options.
 
-- [PayPal](https://www.paypal.com/donate?hosted_button_id=WHCW333MC7CNW)
 - Bitcoin `bc1qhxu9yf9g5jkazy6h4ux6c2apakfr90g2rkwu45`
 - Ethereum `0x9f5D6dd018758891668BF2AC547D38515140460f`
-- Tron `TFw3D8UwduZJvx8J4FPPgPVZ2PPJfyXs3k`
+- Patreon [`patreon.com/carmelosantana`](https://www.patreon.com/carmelosantana)
+- PayPal [`https://www.paypal.com/donate`](https://www.paypal.com/donate?hosted_button_id=WHCW333MC7CNW)
+
+## Changelog
+
+- **0.3.0** - Aug 6, 2024
+  - Fix psr-4 namespace
+  - Update all methods from underscores to camelCase
+  - Update PHP requirements
 
 ## License
 
