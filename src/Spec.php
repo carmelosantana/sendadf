@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace carmelosantana\SendADF;
+namespace CarmeloSantana\SendAdf;
 
 class Spec {
     /** @var array ADF */

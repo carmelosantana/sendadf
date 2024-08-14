@@ -1,11 +1,11 @@
 <?php
 require dirname( __DIR__ ) . '/vendor/autoload.php';
 
-// example 4: Custom tags using add_parent_node() + add_node() with validation disabled.
-$adf = ( new carmelosantana\SendADF\SendADF( 'WINDOWS-1250', '1.1' ) )
+// example 4: Custom tags using addParentNode() + addNode() with validation disabled.
+$adf = ( new CarmeloSantana\SendAdf\SendAdf( 'WINDOWS-1250', '1.1' ) )
     ->validation( false )
-    ->add_requestdate( '02/08/2021 10:41AM' )
-    ->add_parent_node( 'cars', [
+    ->addRequestdate( '02/08/2021 10:41AM' )
+    ->addParentNode( 'cars', [
         'Year' => 1999,
         'Make' => 'Chevrolet',
         'Model' => 'Blazer',
@@ -16,46 +16,46 @@ $adf = ( new carmelosantana\SendADF\SendADF( 'WINDOWS-1250', '1.1' ) )
         'Body' => 'SUV',
         'Transmission' => 'A',
     ], [ 'i_want_to' => 'buy', 'status' => 'used', 'this' => 'not in spec' ] )
-        ->add_node( 'odometer', 90000, [ 'status' => 'replaced', 'units' => 'miles'] ) 
-        ->add_parent_node( 'COLORS', [
+        ->addNode( 'odometer', 90000, [ 'status' => 'replaced', 'units' => 'miles'] ) 
+        ->addParentNode( 'COLORS', [
             'interiorcolor' => 'lush brown',
             'exteriorcolor' => 'emerald green',
             'preference' => '2'
         ], [], true )
-    ->close_node()
-    ->add_parent_node( 'person' )
-        ->add_parent_node( 'contact' )
-            ->add_node( 'Name', 'John', [ 'part' => 'first' ] )
-            ->add_node( 'Name', 'Doe', [ 'part' => 'last' ] )
-            ->add_node( 'Email_Address', 'jdoe@hotmail.com' )
-            ->add_node( 'Cell', '393-999-3922', [ 'time' => 'morning' ] )
-        ->close_node()
-        ->add_parent_node( 'TimePlease', [ 'description' => 'Within 1 month' ], [], true )
-        ->add_node( 'Words', 'Can you deliver my new car by next Thursday?' )
-    ->close_node()
-    ->add_parent_node( 'business' )
-        ->add_node( 'businessname', 'Carmelo\'s Internet Outlet' )
-        ->add_node( 'website', 'https://carmelosantana.com' )
-        ->add_parent_node( 'talk_to_me' )
-            ->add_node( 'my_name_is', 'Carmelo Santana', [ 'part' => 'full' ] )
-            ->add_node( 'email', 'git@carmelosantana.com' )
-            ->add_node( 'voice', '333-999-2222', [ 'when' => 'evening'] )
-            ->add_node( 'fax', '393-991-2999', [ 'when' => 'evening'] )
-            ->add_parent_node( 'where', null, [ 'type' => 'business' ] )
-                ->add_node( 'street', '86 Broadway', [ 'line' => 1 ] )
-                ->add_node( 'street', 'First Floor', [ 'line' => 2 ] )
-                ->add_node( 'city', 'Newburgh' )
-                ->add_node( 'state', 'NY' )
-                ->add_node( 'zipcode', '12550-7638' )
-                ->add_node( 'country', 'US' )
-            ->close_node()
-        ->close_node()
-    ->close_node()
-    ->add_parent_node( 'the_who' )
-        ->add_node( 'name', 'CarPoint' )
-        ->add_node( 'service', 'Used Car Classifieds' )
-        ->add_node( 'url', 'http://carpoint.msn.com' )
-        ->add_node( 'email', 'carcomm@carpoint.com' )
-        ->add_node( 'phone', '425-555-1212' );
+    ->closeNode()
+    ->addParentNode( 'person' )
+        ->addParentNode( 'contact' )
+            ->addNode( 'Name', 'John', [ 'part' => 'first' ] )
+            ->addNode( 'Name', 'Doe', [ 'part' => 'last' ] )
+            ->addNode( 'Email_Address', 'jdoe@hotmail.com' )
+            ->addNode( 'Cell', '393-999-3922', [ 'time' => 'morning' ] )
+        ->closeNode()
+        ->addParentNode( 'TimePlease', [ 'description' => 'Within 1 month' ], [], true )
+        ->addNode( 'Words', 'Can you deliver my new car by next Thursday?' )
+    ->closeNode()
+    ->addParentNode( 'business' )
+        ->addNode( 'businessname', 'Carmelo\'s Internet Outlet' )
+        ->addNode( 'website', 'https://carmelosantana.com' )
+        ->addParentNode( 'talk_to_me' )
+            ->addNode( 'my_name_is', 'Carmelo Santana', [ 'part' => 'full' ] )
+            ->addNode( 'email', 'git@carmelosantana.com' )
+            ->addNode( 'voice', '333-999-2222', [ 'when' => 'evening'] )
+            ->addNode( 'fax', '393-991-2999', [ 'when' => 'evening'] )
+            ->addParentNode( 'where', null, [ 'type' => 'business' ] )
+                ->addNode( 'street', '86 Broadway', [ 'line' => 1 ] )
+                ->addNode( 'street', 'First Floor', [ 'line' => 2 ] )
+                ->addNode( 'city', 'Newburgh' )
+                ->addNode( 'state', 'NY' )
+                ->addNode( 'zipcode', '12550-7638' )
+                ->addNode( 'country', 'US' )
+            ->closeNode()
+        ->closeNode()
+    ->closeNode()
+    ->addParentNode( 'the_who' )
+        ->addNode( 'name', 'CarPoint' )
+        ->addNode( 'service', 'Used Car Classifieds' )
+        ->addNode( 'url', 'http://carpoint.msn.com' )
+        ->addNode( 'email', 'carcomm@carpoint.com' )
+        ->addNode( 'phone', '425-555-1212' );
                 
 echo $adf->getPrettyPrintXML();

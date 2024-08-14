@@ -1,11 +1,4 @@
-# composer
-composer.phar
 vendor/
-
-# phpdoc
-phpdoc-md
-.phpdoc
-docs/phpdoc
-docs/README.md
-docs/SendADF.md
-docs/example.php
+.DS_Store
+composer.lock
+composer.phar
